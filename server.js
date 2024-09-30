@@ -46,10 +46,10 @@ class IPs {
     iAMlEAVING () {
         IDS = IDS.filter(ie => ie !== this.id);
         for(let i = 0; i < IDS.length; i++) {
-            if(IDS[i] !== this.id) {
-                this.websocket.to(IDS[i]).emit("on-someone-disconnects", this.id);
-            }
+            this.websocket.to(IDS[i]).emit("on-someone-disconnects", this.id);
         }
+
+        console.log("after removing: ", IDS);
     }
 }
 
@@ -76,6 +76,7 @@ io.on("connection", (socket) => {
         socket.to(id).emit("send-track", socket.id);
     })
     socket.on("i-am-leaving", () => {
+        console.log("before leaving: ", [...IDS])
         IP.iAMlEAVING();
     })
     socket.on("send-negotiation-offer", ({offer, socketId}) => {
